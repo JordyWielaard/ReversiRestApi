@@ -66,8 +66,7 @@ namespace ReversiRestApi.DAL
             var spel = new Spel();
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
-                string query = "SELECT * FROM Games WHERE Token = '" + spelToken + "'";
-                string queryBord = "SELECT * FROM Cell Where Token = '" + spelToken + "'";
+                string query = "SELECT * FROM Games JOIN Cell ON Games.Token = Cell.Token WHERE Games.Token = '" + spelToken + "'";
                 sqlCon.Open();
                 SqlCommand sqlCmd = new SqlCommand(query, sqlCon);
                 SqlDataReader rdr = sqlCmd.ExecuteReader();
@@ -80,17 +79,8 @@ namespace ReversiRestApi.DAL
                     spel.Speler2Token = Convert.ToString(rdr["Speler2Token"]);
                     spel.Omschrijving = Convert.ToString(rdr["Omschrijving"]);
                     spel.AandeBeurt = (Kleur)Convert.ToInt32(rdr["AandeBeurt"]);
+                    spel.Bord[Convert.ToInt32(rdr["Col"]), Convert.ToInt32(rdr["Row"])] = (Kleur)Convert.ToInt32(rdr["Kleur"]);
                 }
-                rdr.Close();
-
-                SqlCommand sqlCmdBord = new SqlCommand(queryBord, sqlCon);
-                SqlDataReader rdrBord = sqlCmdBord.ExecuteReader();
-
-                while (rdrBord.Read())
-                {
-                    spel.Bord[Convert.ToInt32(rdrBord["Col"]), Convert.ToInt32(rdrBord["Row"])] = (Kleur)Convert.ToInt32(rdrBord["Kleur"]);
-                }
-                rdrBord.Close();
                 sqlCon.Close();               
             }
             return spel;
@@ -98,15 +88,29 @@ namespace ReversiRestApi.DAL
 
         public List<Spel> GetSpellen()
         {
-            //var spelList = new List<Spel>();
-            //string sqlQuery = "SELECT * FROM Games";
+            var spelList = new List<Spel>();
+            string sqlQuery = "SELECT * FROM Games JOIN Cell ON Games.Token = Cell.Token";
 
-            //using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
-            //{
-            //    sqlCon.Open();
-            //    SqlCommand sqlCmd = new SqlCommand(sqlQuery, sqlCon);
-            //}
-            throw new NotImplementedException();
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand(sqlQuery, sqlCon);
+                SqlDataReader rdr = sqlCmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    var spel = new Spel();
+                    spel.ID = Convert.ToInt32(rdr["ID"]);
+                    spel.Token = Convert.ToString(rdr["Token"]);
+                    spel.Speler1Token = Convert.ToString(rdr["Speler1Token"]);
+                    spel.Speler2Token = Convert.ToString(rdr["Speler2Token"]);
+                    spel.Omschrijving = Convert.ToString(rdr["Omschrijving"]);
+                    spel.AandeBeurt = (Kleur)Convert.ToInt32(rdr["AandeBeurt"]);
+                    spel.Bord[Convert.ToInt32(rdr["Col"]), Convert.ToInt32(rdr["Row"])] = (Kleur)Convert.ToInt32(rdr["Kleur"]);
+                    spelList.Add(spel);
+                }
+            }
+            return spelList;
         }
     }
 }

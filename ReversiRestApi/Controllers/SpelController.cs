@@ -34,11 +34,7 @@ namespace ReversiRestApi.Controllers
         [HttpGet("{gameToken}")]
         public ActionResult<Spel> GetGame(string gameToken)
         {
-            var spel = (
-                 (from value in iRepository.GetSpellen()
-                  where value.Token.Equals(gameToken)
-                  select value).First());
-
+            var spel = iRepository.GetSpel(gameToken);                
             return new ObjectResult(new SpelTbvJson(spel));
         }
 
