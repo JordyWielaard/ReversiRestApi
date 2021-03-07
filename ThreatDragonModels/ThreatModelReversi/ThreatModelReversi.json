@@ -1,0 +1,16 @@
+{
+  "summary": {
+    "title": "ThreatModelReversi",
+    "owner": "Jordy Wielaard"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "ReversiThreadModel(STRIDE)",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ]
+  }
+}
