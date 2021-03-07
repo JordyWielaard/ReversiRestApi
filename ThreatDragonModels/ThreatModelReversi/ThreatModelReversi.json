@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "title": "ThreatModelReversi",
+    "owner": "Jordy Wielaard"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "ReversiSpoofing",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      },
+      {
+        "title": "ReversiTempering",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 1
+      },
+      {
+        "title": "ReversiRepudation",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 2
+      },
+      {
+        "title": "ReversiInformationDisclosure",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 3
+      },
+      {
+        "title": "ReversiDenialofService",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 4
+      },
+      {
+        "title": "ReversiElevationofPrivilege",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 5
+      }
+    ]
+  }
+}
