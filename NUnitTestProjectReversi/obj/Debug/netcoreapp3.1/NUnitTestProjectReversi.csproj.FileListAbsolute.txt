@@ -99,3 +99,9 @@ C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\obj\D
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\obj\Debug\netcoreapp3.1\NUnitTestProjectReversi.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\obj\Debug\netcoreapp3.1\NUnitTestProjectReversi.pdb
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\obj\Debug\netcoreapp3.1\NUnitTestProjectReversi.genruntimeconfig.cache
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\NUnitTestProjectReversi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

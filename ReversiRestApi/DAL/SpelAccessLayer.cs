@@ -12,34 +12,25 @@ namespace ReversiRestApi.DAL
     {
         private const string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=ReversiDbRestApi; Integrated Security=True;";
 
-        //SQL querys to allow insertation into db
-        private const string IdOn = "SET IDENTITY_INSERT Games ON";
-        private const string IdOff = "SET IDENTITY_INSERT Games Off";
-
         //Insert game to database table & insert all cell values into cell table with the game token
         public void AddSpel(Spel spel)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
                 //INSET querys for game and bord
-                string addSpelQuery = "INSERT INTO Games (ID, Token, Speler1Token, Speler2Token, Omschrijving, AandeBeurt) VALUES(@ID, @Token, @Speler1Token, @Speler2Token, @Omschrijving, @AandeBeurt)";
+                string addSpelQuery = "INSERT INTO Games (Token, Speler1Token, Omschrijving, AandeBeurt) VALUES(@Token, @Speler1Token, @Omschrijving, @AandeBeurt)";
                 string addBordQuery = "INSERT INTO Cell (Token, Row, Col, Kleur) VALUES (@Token, @Row, @Col, @Kleur)";
                
-                SqlCommand sqlCmdOn = new SqlCommand(IdOn, sqlCon);
-                SqlCommand sqlCmdOff = new SqlCommand(IdOff, sqlCon);
-                 
                 SqlCommand sqlCmd = new SqlCommand(addSpelQuery, sqlCon);
-                sqlCmd.Parameters.AddWithValue("@ID", spel.ID);
+
                 sqlCmd.Parameters.AddWithValue("@Token", spel.Token);
                 sqlCmd.Parameters.AddWithValue("@Speler1Token", spel.Speler1Token);
-                sqlCmd.Parameters.AddWithValue("@Speler2Token", spel.Speler2Token);
                 sqlCmd.Parameters.AddWithValue("@Omschrijving", spel.Omschrijving);
                 sqlCmd.Parameters.AddWithValue("@AandeBeurt", spel.AandeBeurt);
-
+                
                 sqlCon.Open();
-                sqlCmdOn.ExecuteNonQuery();
-                sqlCmd.ExecuteNonQuery();
-
+                sqlCmd.ExecuteNonQuery();             
+                
                 //Loops over game bord and adds all cells with x and y locations and the colour that occupies the space and the game token
                 for (int i = 0; i < spel.Bord.GetLength(0); i++)
                 {
@@ -54,7 +45,6 @@ namespace ReversiRestApi.DAL
                     }
                 }
                 
-                sqlCmdOff.ExecuteNonQuery();
                 sqlCon.Close();
 
             }
@@ -89,7 +79,7 @@ namespace ReversiRestApi.DAL
         public List<Spel> GetSpellen()
         {
             var spelList = new List<Spel>();
-            string sqlQuery = "SELECT * FROM Games JOIN Cell ON Games.Token = Cell.Token";
+            string sqlQuery = "SELECT Token FROM Games";
 
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
@@ -99,15 +89,7 @@ namespace ReversiRestApi.DAL
 
                 while (rdr.Read())
                 {
-                    var spel = new Spel();
-                    spel.ID = Convert.ToInt32(rdr["ID"]);
-                    spel.Token = Convert.ToString(rdr["Token"]);
-                    spel.Speler1Token = Convert.ToString(rdr["Speler1Token"]);
-                    spel.Speler2Token = Convert.ToString(rdr["Speler2Token"]);
-                    spel.Omschrijving = Convert.ToString(rdr["Omschrijving"]);
-                    spel.AandeBeurt = (Kleur)Convert.ToInt32(rdr["AandeBeurt"]);
-                    spel.Bord[Convert.ToInt32(rdr["Col"]), Convert.ToInt32(rdr["Row"])] = (Kleur)Convert.ToInt32(rdr["Kleur"]);
-                    spelList.Add(spel);
+                    spelList.Add(GetSpel(Convert.ToString(rdr["Token"])));
                 }
             }
             return spelList;

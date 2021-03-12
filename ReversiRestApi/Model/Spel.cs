@@ -46,6 +46,8 @@ namespace ReversiRestApi.Model
             Bord[3, 4] = Kleur.Zwart;
             Bord[4, 3] = Kleur.Zwart;
             Bord[4, 4] = Kleur.Wit;
+            AandeBeurt = Kleur.Zwart;
+
         }
         public Kleur GetPlayerColour(string playerToken)
         {

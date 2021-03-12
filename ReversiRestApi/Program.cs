@@ -17,43 +17,14 @@ namespace ReversiRestApi
         public static void Main(string[] args)
         {
 
-            Spel sp = new Spel
+            Spel sp2 = new Spel
             {
-                ID = 3,
+                ID = 5,
                 Token = Guid.NewGuid().ToString(),
                 Speler1Token = Guid.NewGuid().ToString(),
-                Speler2Token = Guid.NewGuid().ToString(),
-                Omschrijving = "Test",
+                Omschrijving = "Geen Speler 2",
                 AandeBeurt = Kleur.Wit,
             };
-
-            Spel sp1 = new Spel
-            {
-                ID = 4,
-                Token = Guid.NewGuid().ToString(),
-                Speler1Token = Guid.NewGuid().ToString(),
-                Speler2Token = Guid.NewGuid().ToString(),
-                Omschrijving = "Test",
-                AandeBeurt = Kleur.Wit,
-            };
-
-            SpelAccessLayer sal = new SpelAccessLayer();
-            //sal.AddSpel(sp1);
-            Console.WriteLine(sal.GetSpel("DC645EB6-72FC-4298-9961-189014B80608").Omschrijving);
-            for (int i = 0; i < sp.Bord.GetLength(0); i++)
-            {
-                for (int j = 0; j < sp.Bord.GetLength(1); j++)
-                {
-                    Console.WriteLine(sal.GetSpel("DC645EB6-72FC-4298-9961-189014B80608").Bord[i, j]);
-                }
-            }
-
-            //foreach (var item in sal.GetSpellen())
-            //{
-            //    Console.WriteLine(item.ID + " " + item.Omschrijving + " " + item.AandeBeurt.ToString());
-            //}
-
-
             CreateHostBuilder(args).Build().Run();
         }
 

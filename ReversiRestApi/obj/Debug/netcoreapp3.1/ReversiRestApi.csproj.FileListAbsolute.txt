@@ -17,7 +17,6 @@ C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netc
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.pdb
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.genruntimeconfig.cache
-C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.csprojAssemblyReference.cache
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
@@ -25,3 +24,4 @@ C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netc
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.csproj.CopyComplete
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.csprojAssemblyReference.cache

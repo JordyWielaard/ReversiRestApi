@@ -26,7 +26,7 @@ namespace ReversiRestApi.Controllers
                 (from value
                  in iRepository.GetSpellen()
                  where string.IsNullOrWhiteSpace(value.Speler2Token)
-                 select value.Omschrijving)
+                 select new { value.Omschrijving, value.Speler1Token, value.Token})
                 .ToList());
         }
 
@@ -38,19 +38,25 @@ namespace ReversiRestApi.Controllers
             return new ObjectResult(new SpelTbvJson(spel));
         }
 
+        [HttpGet("Eindstand/{gameToken}")]
+        public ActionResult<Spel> GetGameEindstand(string gameToken)
+        {
+            var spel = iRepository.GetSpel(gameToken);
+            return new ObjectResult(new SpelTbvJson(spel));
+        }
+
         // GET api/SpelSpeler/<spelertoken>
         [HttpGet("Speler/{playerToken}")]
         public ActionResult<Spel> GetGamePlayer(string playerToken)
         {
             if (!string.IsNullOrWhiteSpace(playerToken))
             {
-                var spel = (
-                (from value in iRepository.GetSpellen()
-                 where value.Speler1Token.Equals(playerToken) ||
-                 value.Speler2Token.Equals(playerToken)
-                 select value).First());
+                var spel = iRepository.GetSpellen().Where(token1 => token1.Speler1Token == playerToken || token1.Speler2Token == playerToken).FirstOrDefault();
 
-                return new ObjectResult(new SpelTbvJson(spel));
+                if (spel != null)
+                {
+                    return new ObjectResult(new SpelTbvJson(spel));
+                }
             }
             return null;
 
@@ -113,18 +119,17 @@ namespace ReversiRestApi.Controllers
 
         // POST api/CreateGame
         [HttpPost]
-        public ObjectResult CreateGame(string playerToken, string omschrijving)
+        public ObjectResult CreateGame([FromBody] CreateGame data)
         {
-            Spel spel = new Spel
+            Spel NieuwSpel = new Spel
             {
-                Speler1Token = playerToken,
-                Omschrijving = omschrijving,
+                Speler1Token = data.Speler1Token,
+                Omschrijving = data.Omschrijving,
                 Token = Guid.NewGuid().ToString()
             };
 
-            iRepository.AddSpel(spel);
-
-            return StatusCode(201, spel.Token);
+            iRepository.AddSpel(NieuwSpel);
+            return StatusCode(201, NieuwSpel.Token);
         }
     }
 }
