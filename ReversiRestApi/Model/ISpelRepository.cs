@@ -9,7 +9,9 @@ namespace ReversiRestApi.Model
     public interface ISpelRepository
     {
         void AddSpel(Spel spel);
+        void JoinSpel(JoinGame data);
         public List<Spel> GetSpellen();
         Spel GetSpel(string spelToken);
+        void DeleteSpel(string spelToken);
     }
 }

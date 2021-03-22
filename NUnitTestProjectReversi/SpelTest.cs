@@ -1544,7 +1544,7 @@ namespace NUnitTestProjectReversi
                 // 7   1 1 1 1 1 1 1 1
                 // Act
                 spel.AandeBeurt = Kleur.Wit;
-                var actual = spel.Afgelopen();
+                var actual = spel.SpelAfgelopen();
                 // Assert
                 Assert.IsTrue(actual);
             }
@@ -1631,7 +1631,7 @@ namespace NUnitTestProjectReversi
                 // 7   1 1 1 1 1 1 1 1
                 // Act
                 spel.AandeBeurt = Kleur.Wit;
-                var actual = spel.Afgelopen();
+                var actual = spel.SpelAfgelopen();
                 // Assert
                 Assert.IsTrue(actual);
             }
@@ -1654,7 +1654,7 @@ namespace NUnitTestProjectReversi
                 //                     
                 // Act
                 spel.AandeBeurt = Kleur.Wit;
-                var actual = spel.Afgelopen();
+                var actual = spel.SpelAfgelopen();
                 // Assert
                 Assert.IsFalse(actual);
             }

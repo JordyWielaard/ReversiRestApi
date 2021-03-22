@@ -38,20 +38,12 @@ namespace ReversiRestApi.Controllers
             return new ObjectResult(new SpelTbvJson(spel));
         }
 
-        [HttpGet("Eindstand/{gameToken}")]
-        public ActionResult<Spel> GetGameEindstand(string gameToken)
+        [HttpGet("Speler/{spelertoken}")]
+        public ActionResult<Spel> GetGamePlayer(string spelertoken)
         {
-            var spel = iRepository.GetSpel(gameToken);
-            return new ObjectResult(new SpelTbvJson(spel));
-        }
-
-        // GET api/SpelSpeler/<spelertoken>
-        [HttpGet("Speler/{playerToken}")]
-        public ActionResult<Spel> GetGamePlayer(string playerToken)
-        {
-            if (!string.IsNullOrWhiteSpace(playerToken))
+            if (!string.IsNullOrWhiteSpace(spelertoken))
             {
-                var spel = iRepository.GetSpellen().Where(token1 => token1.Speler1Token == playerToken || token1.Speler2Token == playerToken).FirstOrDefault();
+                var spel = iRepository.GetSpellen().Where(spel => (spel.Speler1Token == spelertoken || spel.Speler2Token == spelertoken) &&  spel.Afgelopen == false).FirstOrDefault();
 
                 if (spel != null)
                 {
@@ -62,18 +54,14 @@ namespace ReversiRestApi.Controllers
 
         }
 
-        // GET api/Beurt/<spelertoken>
-        [HttpGet("Beurt/{gameToken}")]
-        public ActionResult<Kleur> GetGameTurn(string gameToken)
+        // GET api/Beurt/<speltoken>
+        [HttpGet("Beurt/{speltoken}")]
+        public ActionResult<Kleur> GetGameTurn(string speltoken)
         {
-            if (!string.IsNullOrWhiteSpace(gameToken))
+            if (!string.IsNullOrWhiteSpace(speltoken))
             {
-                var turn = (
-                (from value in iRepository.GetSpellen()
-                 where value.Token.Equals(gameToken)
-                 select value.AandeBeurt).First());
-
-                return new ObjectResult(turn);
+                var spel = iRepository.GetSpel(speltoken);
+                return new ObjectResult(spel.AandeBeurt);
             }
             return null;
 
@@ -114,7 +102,12 @@ namespace ReversiRestApi.Controllers
                         select value).First();
 
             return game.Surrender(data.playerToken);
+        }
 
+        [HttpPut("SpelerToevoegen")]
+        public void SpelerToevoegen([FromBody] JoinGame data)
+        {
+            iRepository.JoinSpel(data);
         }
 
         // POST api/CreateGame
@@ -125,11 +118,31 @@ namespace ReversiRestApi.Controllers
             {
                 Speler1Token = data.Speler1Token,
                 Omschrijving = data.Omschrijving,
-                Token = Guid.NewGuid().ToString()
+                Token = Guid.NewGuid().ToString(),
+                Afgelopen = false
             };
 
             iRepository.AddSpel(NieuwSpel);
             return StatusCode(201, NieuwSpel.Token);
+        }
+
+        [HttpDelete("{Id}")]
+        public void SpelVerwijderen(string Id)
+        {
+            List<Spel> spellen;
+            spellen = iRepository.GetSpellen();
+
+            if (spellen != null)
+            {
+                foreach (var item in spellen)
+                {
+                    if (item.Speler1Token.ToLower().Equals(Id.ToLower()) || item.Speler2Token.ToLower().Equals(Id.ToLower()))
+                    {
+                        iRepository.DeleteSpel(item.Token);
+                    }
+
+                }
+            }
         }
     }
 }

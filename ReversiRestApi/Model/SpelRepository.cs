@@ -34,6 +34,13 @@ namespace ReversiRestApi.Model
             Spellen.Add(spel);
         }
 
+        public void JoinSpel(JoinGame data)
+        {
+
+        }
+
+        public void DeleteSpel(string spelToken) { }
+
         public List<Spel> GetSpellen()
         {
             return Spellen;
