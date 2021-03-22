@@ -35,8 +35,8 @@ namespace ReversiRestApi.Model
         public Kleur[,] Bord { get; set; }
         public Kleur AandeBeurt { get; set; }
         public List<Coordinaten> Coordinaten { get; set; }
-        public string Winner { get; private set; }
-        public bool Finished { get; private set; }
+        public string Winner { get; set; }
+        public bool Afgelopen { get; set; }
 
         public Spel()
         {
@@ -47,6 +47,7 @@ namespace ReversiRestApi.Model
             Bord[4, 3] = Kleur.Zwart;
             Bord[4, 4] = Kleur.Wit;
             AandeBeurt = Kleur.Zwart;
+            Afgelopen = false;
 
         }
         public Kleur GetPlayerColour(string playerToken)
@@ -70,14 +71,14 @@ namespace ReversiRestApi.Model
             if (playerID.Equals(Speler1Token))
             {
                 Winner = Speler2Token;
-                Finished = true;
+                Afgelopen = true;
                 return true;
 
             }
             else if (playerID.Equals(Speler2Token))
             {
                 Winner = Speler1Token;
-                Finished = true;
+                Afgelopen = true;
                 return true;
             }
             else
@@ -86,7 +87,7 @@ namespace ReversiRestApi.Model
                 return false;
             }
         }
-        public bool Afgelopen()
+        public bool SpelAfgelopen()
         {
             for (int col = 0; col < Bord.GetLength(0); col++)
             {
