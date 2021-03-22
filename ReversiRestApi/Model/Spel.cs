@@ -32,7 +32,6 @@ namespace ReversiRestApi.Model
                 PlayerMapping.TryAdd(Speler2Token, Kleur.Wit);
             }
         }
-        public virtual ICollection<Bord> Borden { get; set; }
         public Kleur[,] Bord { get; set; }
         public Kleur AandeBeurt { get; set; }
         public List<Coordinaten> Coordinaten { get; set; }
@@ -131,8 +130,6 @@ namespace ReversiRestApi.Model
             {
                 if (aanZet == Kleur.Wit)
                 {
-
-                    Borden.Add(new Bord() { Row = item.X, Col = item.Y, Kleur = Kleur.Wit.ToString() });
                     Bord[item.X, item.Y] = Kleur.Wit;
                 }
                 else if (aanZet == Kleur.Zwart)

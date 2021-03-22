@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ReversiRestApi.DAL;
-using ReversiRestApi.Data;
 using ReversiRestApi.Model;
 using System;
 using System.Collections.Generic;
@@ -42,7 +41,6 @@ namespace ReversiRestApi
 
             services.AddControllers();
             services.AddSingleton<ISpelRepository, SpelAccessLayer>();
-            services.AddDbContext<SpelDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ReversiApiDatabase")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
