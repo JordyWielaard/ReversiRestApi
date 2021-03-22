@@ -37,8 +37,6 @@ namespace ReversiRestApi
                                             "https://jordywielaard.hbo-ict.org");
                     });
             });
-
-
             services.AddControllers();
             services.AddSingleton<ISpelRepository, SpelAccessLayer>();
         }
