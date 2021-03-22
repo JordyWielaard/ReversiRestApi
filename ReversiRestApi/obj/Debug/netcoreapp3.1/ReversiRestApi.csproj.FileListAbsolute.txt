@@ -24,4 +24,5 @@ C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netc
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.csproj.CopyComplete
+C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\A.W. Wielaard\source\repos\ReversiRestApi\ReversiRestApi\obj\Debug\netcoreapp3.1\ReversiRestApi.csprojAssemblyReference.cache

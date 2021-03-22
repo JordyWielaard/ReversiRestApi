@@ -33,6 +33,7 @@ namespace ReversiRestApi
                     builder =>
                     {
                         builder.WithOrigins("https://localhost",
+                                            "http://localhost:3000",
                                             "https://jordywielaard.hbo-ict.org");
                     });
             });
