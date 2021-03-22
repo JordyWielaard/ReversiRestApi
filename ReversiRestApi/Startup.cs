@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,10 +34,10 @@ namespace ReversiRestApi
                     builder =>
                     {
                         builder.WithOrigins("https://localhost",
+                                            "http://localhost:3000",
                                             "https://jordywielaard.hbo-ict.org");
                     });
             });
-
 
             services.AddControllers();
             services.AddSingleton<ISpelRepository, SpelAccessLayer>();

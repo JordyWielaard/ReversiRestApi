@@ -17,7 +17,7 @@ namespace ReversiRestApi.Model
         Kleur[,] Bord { get; set; }
         Kleur AandeBeurt { get; set; }
         bool Pas();
-        bool Afgelopen();
+        bool SpelAfgelopen();
 
         //welke kleur het meest voorkomend op het spelbord
         Kleur OverwegendeKleur();
