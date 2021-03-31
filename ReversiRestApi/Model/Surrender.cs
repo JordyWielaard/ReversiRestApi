@@ -7,7 +7,7 @@ namespace ReversiRestApi.Model
 {
     public class Surrender
     {
-        public string gameToken { get; set; }
-        public string playerToken { get; set; }
+        public string SpelToken { get; set; }
+        public string SpelerToken { get; set; }
     }
 }

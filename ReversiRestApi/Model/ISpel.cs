@@ -23,7 +23,7 @@ namespace ReversiRestApi.Model
         Kleur OverwegendeKleur();
 
         //controle of op een bepaalde positie een zet mogelijk is
-        bool ZetMogelijk(int rijZet, int kolomZet);
+        List<Direction> ZetMogelijk(int rijZet, int kolomZet);
         bool DoeZet(int rijZet, int kolomZet);
     }
 }

@@ -1,18 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using ReversiRestApi.DAL;
 using ReversiRestApi.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ReversiRestApi
 {
@@ -33,10 +25,13 @@ namespace ReversiRestApi
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost",
+                        builder.WithOrigins("https://localhost:44378",
                                             "http://localhost:3000",
-                                            "https://jordywielaard.hbo-ict.org");
+                                            "https://jordywielaard.hbo-ict.org")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                     });
+                
             });
 
             services.AddControllers();
@@ -51,7 +46,11 @@ namespace ReversiRestApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                await next();
+            });
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

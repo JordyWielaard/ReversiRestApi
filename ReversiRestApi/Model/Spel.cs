@@ -8,39 +8,18 @@ namespace ReversiRestApi.Model
 {
     public class Spel : ISpel
     {
-        private Dictionary<string, Kleur> PlayerMapping = new Dictionary<string, Kleur>();
         public int ID { get; set; }
         public string Omschrijving { get; set; }
         public string Token { get; set; }
-        private string _speler1Token;
-        public string Speler1Token
-        {
-            get => _speler1Token;
-            set
-            {
-                _speler1Token = value;
-                PlayerMapping.TryAdd(Speler1Token, Kleur.Zwart);
-            }
-        }
-        private string _speler2Token;
-        public string Speler2Token
-        {
-            get => _speler2Token;
-            set
-            {
-                _speler2Token = value;
-                PlayerMapping.TryAdd(Speler2Token, Kleur.Wit);
-            }
-        }
+        public string Speler1Token { get; set; }
+        public string Speler2Token { get; set; }
         public Kleur[,] Bord { get; set; }
         public Kleur AandeBeurt { get; set; }
-        public List<Coordinaten> Coordinaten { get; set; }
-        public string Winner { get; set; }
+        public string Winnaar { get; set; }
         public bool Afgelopen { get; set; }
 
         public Spel()
         {
-            Coordinaten = new List<Coordinaten>();
             Bord = new Kleur[8, 8];
             Bord[3, 3] = Kleur.Wit;
             Bord[3, 4] = Kleur.Zwart;
@@ -50,34 +29,143 @@ namespace ReversiRestApi.Model
             Afgelopen = false;
 
         }
-        public Kleur GetPlayerColour(string playerToken)
+        public int SpelerPieces(Kleur kleur)
         {
-            try
+            int aantal = 0;
+            for (int opzij = 0; opzij < Bord.GetLength(0); opzij++)
             {
-                Kleur playerColour;
+                for (int omlaag = 0; omlaag < Bord.GetLength(1); omlaag++)
+                {
+                    if (kleur == Kleur.Wit)
+                    {
+                        if (Bord[opzij, omlaag] == kleur || Bord[opzij, omlaag] == Kleur.NieuwWit)
+                        {
+                            aantal++;
+                        }
 
-                PlayerMapping.TryGetValue(playerToken, out playerColour);
-
-                return playerColour;
+                    }
+                    else
+                    {
+                        if (Bord[opzij, omlaag] == kleur || Bord[opzij, omlaag] == Kleur.NieuwZwart)
+                        {
+                            aantal++;
+                        }
+                    }
+                }
             }
-            catch (Exception _)
+            return aantal;
+        }
+        public List<Positie> OmTeKerenFichesInRichting(Direction richting, Kleur kleurAandeBeurt, Positie positie)
+        {
+            List<Positie> voorlopigeLijst = new List<Positie>();
+
+            var buurPositie = CheckRichting(richting,positie);
+            while (buurPositie != null && Bord[buurPositie.Opzij, buurPositie.Omlaag] == Tegenstander(kleurAandeBeurt))
+            {
+                voorlopigeLijst.Add(buurPositie);
+                buurPositie = CheckRichting(richting, buurPositie);
+            }
+            if (buurPositie != null && Bord[buurPositie.Opzij, buurPositie.Omlaag] == kleurAandeBeurt)
+            {
+                return voorlopigeLijst;
+            }
+
+            return new List<Positie>();
+        }
+        public Kleur Tegenstander(Kleur aandeBeurt)
+        {
+            if (AandeBeurt == Kleur.Wit)
+            {
+                return Kleur.Zwart;
+            }
+            else if (aandeBeurt == Kleur.Zwart)
+            {
+                return Kleur.Wit;
+            }
+            else
             {
                 return Kleur.Geen;
             }
-
+        }
+        public Positie CheckRichting(Direction richting, Positie huidigePositie)
+        {
+            switch (richting)
+            {
+                case Direction.NorthWest:
+                    if (huidigePositie.Opzij == 0 || huidigePositie.Omlaag == 0)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij -1, huidigePositie.Omlaag - 1);
+                case Direction.North:
+                    if (huidigePositie.Omlaag == 0)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij, huidigePositie.Omlaag-1);
+                case Direction.NorthEast:
+                    if (huidigePositie.Opzij == 7 || huidigePositie.Omlaag == 0)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij+1, huidigePositie.Omlaag-1);
+                case Direction.West:
+                    if (huidigePositie.Opzij == 0)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij - 1, huidigePositie.Omlaag);
+                case Direction.East:
+                    if (huidigePositie.Opzij == 7)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij + 1, huidigePositie.Omlaag);
+                case Direction.SouthWest:
+                    if (huidigePositie.Opzij == 0 || huidigePositie.Omlaag == 7)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij - 1, huidigePositie.Omlaag + 1);
+                case Direction.South:
+                    if (huidigePositie.Omlaag == 7)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij, huidigePositie.Omlaag + 1);
+                case Direction.SouthEast:
+                    if (huidigePositie.Opzij == 7 || huidigePositie.Omlaag == 7)
+                    {
+                        return null;
+                    }
+                    return new Positie(huidigePositie.Opzij + 1, huidigePositie.Omlaag + 1);
+            }
+            return null;
+        }
+        public bool CheckAandeBeurt(string spelerToken)
+        {
+            if (AandeBeurt == Kleur.Wit && Speler2Token == spelerToken)
+            {
+                return true;
+            }
+            else if (AandeBeurt == Kleur.Zwart && Speler1Token == spelerToken)
+            {
+                return true;
+            }
+            return false;
         }
         public bool Surrender(string playerID)
         {
-            if (playerID.Equals(Speler1Token))
+            if (playerID == Speler1Token)
             {
-                Winner = Speler2Token;
+                Winnaar = Speler2Token;
                 Afgelopen = true;
                 return true;
 
             }
-            else if (playerID.Equals(Speler2Token))
+            else if (playerID == Speler2Token)
             {
-                Winner = Speler1Token;
+                Winnaar = Speler1Token;
                 Afgelopen = true;
                 return true;
             }
@@ -89,11 +177,11 @@ namespace ReversiRestApi.Model
         }
         public bool SpelAfgelopen()
         {
-            for (int col = 0; col < Bord.GetLength(0); col++)
+            for (int opzij = 0; opzij < Bord.GetLength(0); opzij++)
             {
-                for (int row = 0; row < Bord.GetLength(1); row++)
+                for (int omlaag = 0; omlaag < Bord.GetLength(1); omlaag++)
                 {
-                    if (ZetMogelijk(row, col))
+                    if (ZetMogelijk(opzij, omlaag).Count() > 0)
                     {
                         return false;
                     }
@@ -101,22 +189,17 @@ namespace ReversiRestApi.Model
             }
             return true;
         }
-
-        public bool DoeZet(int rijZet, int kolomZet)
+        public bool DoeZet(int omlaag, int opzij)
         {
-            if (ZetMogelijk(rijZet, kolomZet))
+            if (ZetMogelijk(omlaag, opzij).Count() > 0)
             {
-                VeranderKleurTile(AandeBeurt);
-                Bord[rijZet, kolomZet] = AandeBeurt;
-                if (AandeBeurt == Kleur.Zwart)
+                foreach (var item in ZetMogelijk(omlaag, opzij))
                 {
-                    AandeBeurt = Kleur.Wit;
+                    VeranderKleurTile(AandeBeurt, OmTeKerenFichesInRichting(item, AandeBeurt, new Positie(omlaag, opzij)));
                 }
-                else
-                {
-                    AandeBeurt = Kleur.Zwart;
-                }
-                return true;
+                    
+                Bord[omlaag, opzij] = AandeBeurt;
+                return Pas();
             }
             else
             {
@@ -124,37 +207,52 @@ namespace ReversiRestApi.Model
             }
         }
 
-        public void VeranderKleurTile(Kleur aanZet)
+        public void UpdateNieuweFiches()
         {
-            foreach (var item in Coordinaten)
+            for (int opzij = 0; opzij < Bord.GetLength(0); opzij++)
+            {
+                for (int omlaag = 0; omlaag < Bord.GetLength(1); omlaag++)
+                {
+                    if (Bord[opzij, omlaag] == Kleur.NieuwWit)
+                    {
+                        Bord[opzij, omlaag] = Kleur.Wit;
+                    }
+                    else if(Bord[opzij, omlaag] == Kleur.NieuwZwart)
+                    {
+                        Bord[opzij, omlaag] = Kleur.Zwart;
+                    }
+                }
+            }
+        }
+
+        public void VeranderKleurTile(Kleur aanZet, List<Positie> posities)
+        {
+            foreach (var item in posities)
             {
                 if (aanZet == Kleur.Wit)
                 {
-                    Bord[item.X, item.Y] = Kleur.Wit;
+                    Bord[item.Opzij, item.Omlaag] = Kleur.NieuwWit;
                 }
-                else if (aanZet == Kleur.Zwart)
+                else
                 {
-                    Bord[item.X, item.Y] = Kleur.Zwart;
-                }
+                    Bord[item.Opzij, item.Omlaag] = Kleur.NieuwZwart;
+                }              
             }
-            Coordinaten.Clear();
         }
-
         public Kleur OverwegendeKleur()
         {
             int countBlack = 0;
             int countWhite = 0;
             int countGeen = 0;
-            for (int col = 0; col < Bord.GetLength(0); col++)
+            for (int omlaag = 0; omlaag < Bord.GetLength(0); omlaag++)
             {
-                for (int row = 0; row < Bord.GetLength(1); row++)
+                for (int opzij = 0; opzij < Bord.GetLength(1); opzij++)
                 {
-                    if (Bord[col, row].Equals(Kleur.Zwart))
+                    if (Bord[omlaag, opzij].Equals(Kleur.Zwart) || Bord[omlaag, opzij].Equals(Kleur.NieuwZwart))
                     {
                         countBlack++;
                     }
-                    else if (
-                        Bord[col, row].Equals(Kleur.Wit))
+                    else if (Bord[omlaag, opzij].Equals(Kleur.Wit) || Bord[omlaag, opzij].Equals(Kleur.NieuwWit))
                     {
                         countWhite++;
                     }
@@ -178,6 +276,21 @@ namespace ReversiRestApi.Model
                 return Kleur.Geen;
             }
         }
+        public void WinnaarSpel(Kleur kleur)
+        {
+            if (kleur.Equals(Kleur.Wit))
+            {
+                Winnaar = Speler2Token;
+            }
+            else if(kleur.Equals(Kleur.Zwart))
+            {
+                Winnaar = Speler1Token;
+            }
+            else
+            {
+                Winnaar = "Gelijkspel";
+            }
+        }
 
         public bool Pas()
         {
@@ -192,163 +305,21 @@ namespace ReversiRestApi.Model
                 return true;
             }
         }
-
-        public bool CheckPieceDirection(Direction direction, Kleur kleur, int row, int col)
+        public List<Direction> ZetMogelijk(int opzij, int omlaag)
         {
-            switch (direction)
+            var positie = new Positie(opzij, omlaag);
+            List<Direction> posibleDirections = new List<Direction>();
+            if (omlaag < 8 && opzij < 8 && omlaag > -1 && opzij > -1 && Bord[opzij, omlaag].Equals(Kleur.Geen))
             {
-                case Direction.NorthWest:
-                    for (int i = row, j = col, k = 0; k < Math.Min(0 + row, 0 + col); i--, j--, k++)
-                    {                    
-                        if (Bord[i, j] == kleur)
-                        {
-                            return true;
-                        }
-                        else if(Bord[i, j] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, j));
-                    }
-                    break;
-                case Direction.North:
-                    for (int i = row; i >= 0; i--)
-                    {
-                        if (Bord[i, col] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, col] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, col));
-                    }
-                    break;
-                case Direction.NorthEast:
-                    for (int i = row, j = col, k = 0; k < Math.Min(0 + row, 8 - col); i--, j++, k++)
-                    {
-                        if (Bord[i, j] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, j] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, j));
-                    }
-                    break;
-                case Direction.West:
-                    for (int i = col; i >= 0; i--)
-                    {
-                        if (Bord[row, i] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[row, i] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(row, i));
-                    }
-                    break;
-                case Direction.East:
-                    for (int i = col; i < 8; i++)
-                    {
-                        if (Bord[row, i] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, col] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, col));
-                    }
-                    break;
-                case Direction.SouthWest:
-                    for (int i = row, j = col, k = 0; k < Math.Min(8 - row, 0 + col); i++, j--, k++)
-                    {
-                        if (Bord[i, j] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, j] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, j));
-                    }
-                    break;
-                case Direction.South:
-                    for (int i = row; i < 8; i++)
-                    {
-                        if (Bord[i, col] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, col] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, col));
-                    }
-                    break;
-                case Direction.SouthEast:
-                    for (int i = row, j = col, k = 0; k < Math.Min(8 - row, 8 - col); i++, j++, k++)
-                    {
-                        if (Bord[i, j] == kleur)
-                        {
-                            return true;
-                        }
-                        else if (Bord[i, j] == Kleur.Geen)
-                        {
-                            break;
-                        }
-                        Coordinaten.Add(new Coordinaten(i, j));
-                    }
-                    break;
-            }
-            Coordinaten.Clear();
-            return false;
-        }
-
-        public bool ZetMogelijk(int rijZet, int kolomZet)
-        {
-            int direction = 0;
-            int startrow = rijZet - 1;
-            int startcol = kolomZet - 1;
-
-            if (rijZet < 8 && kolomZet < 8 && rijZet > -1 && kolomZet > -1 && Bord[rijZet, kolomZet].Equals(Kleur.Geen))
-            {
-                for (int i = 0; i < 3; i++, startrow++)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (startrow < 8 && startrow > -1)
+                    if (OmTeKerenFichesInRichting((Direction)i, AandeBeurt, positie).Count > 0)
                     {
-                        for (int j = 0; j < 3; startcol++, j++, direction++)
-                        { 
-                            if (startcol < 8 && startcol > -1 && direction != 4)
-                            {
-                                if ((AandeBeurt.Equals(Kleur.Zwart) && Bord[startrow, startcol].Equals(Kleur.Wit)) || (AandeBeurt.Equals(Kleur.Wit) && Bord[startrow, startcol].Equals(Kleur.Zwart)))
-                                {
-                                    if (CheckPieceDirection((Direction)direction, AandeBeurt, startrow, startcol))
-                                    {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                        startcol -= 3;
-                    }
-                    else
-                    {
-                        direction += 3;
+                        posibleDirections.Add((Direction)i);
                     }
                 }
-                return false;
             }
-            return false;
+            return posibleDirections;
         }
     }
 }

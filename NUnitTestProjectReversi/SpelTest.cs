@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using ReversiRestApi.Controllers;
 using ReversiRestApi.Model;
+using System.Linq;
 
 namespace NUnitTestProjectReversi
 {
@@ -33,7 +34,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(8, 8);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -56,7 +57,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(2, 3);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -79,7 +80,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(2, 3);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
 
@@ -104,7 +105,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(0, 3);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -129,7 +130,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(0, 3);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -159,7 +160,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(0, 3);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -189,7 +190,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(0, 3);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
 
@@ -218,7 +219,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(4, 7);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -243,7 +244,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(4, 7);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -273,7 +274,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(4, 7);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -304,7 +305,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(4, 7);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
 
@@ -341,7 +342,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(2, 2);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
             [Test]
             public void ZetMogelijk_StartSituatieZet22Zwart_ReturnFalse()
@@ -363,7 +364,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(2, 2);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
 
@@ -389,7 +390,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(0, 7);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -414,7 +415,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(0, 7);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -439,7 +440,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(7, 7);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -464,7 +465,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(7, 7);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -489,7 +490,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(0, 0);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -514,7 +515,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(0, 0);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             [Test]
@@ -539,7 +540,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Wit;
                 var actual = spel.ZetMogelijk(7, 0);
                 // Assert
-                Assert.IsTrue(actual);
+                Assert.IsTrue(actual.Count() > 0);
             }
 
             [Test]
@@ -564,7 +565,7 @@ namespace NUnitTestProjectReversi
                 spel.AandeBeurt = Kleur.Zwart;
                 var actual = spel.ZetMogelijk(7, 0);
                 // Assert
-                Assert.IsFalse(actual);
+                Assert.IsFalse(actual.Count() > 0);
             }
 
             //---------------------------------------------------------------------------
@@ -619,7 +620,7 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[2, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[3, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[3, 3]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 3]);
 
                 Assert.AreEqual(Kleur.Wit, spel.AandeBeurt);
@@ -680,9 +681,9 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[0, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[1, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[2, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[3, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[1, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[2, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[3, 3]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 3]);
 
                 Assert.AreEqual(Kleur.Wit, spel.AandeBeurt);
@@ -752,12 +753,12 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[0, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[1, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[2, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[3, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[5, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[6, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[1, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[2, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[3, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[5, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[6, 3]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[7, 3]);
 
             }
@@ -824,9 +825,9 @@ namespace NUnitTestProjectReversi
                 Assert.IsTrue(actual);
 
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 4]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 5]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 6]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 4]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 5]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 6]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 7]);
             }
 
@@ -892,12 +893,12 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 0]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 1]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 2]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 4]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 5]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 6]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 1]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 2]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 4]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 5]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 6]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 7]);
             }
 
@@ -1041,10 +1042,10 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Wit, spel.Bord[5, 2]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[4, 3]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[3, 4]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[2, 5]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[1, 6]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[4, 3]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[3, 4]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[2, 5]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[1, 6]);
                 Assert.AreEqual(Kleur.Wit, spel.Bord[0, 7]);
             }
 
@@ -1109,10 +1110,10 @@ namespace NUnitTestProjectReversi
                 Assert.IsTrue(actual);
 
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[2, 2]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[3, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 4]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[5, 5]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[6, 6]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[3, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 4]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[5, 5]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[6, 6]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[7, 7]);
             }
 
@@ -1175,10 +1176,10 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[0, 0]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[1, 1]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[2, 2]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[3, 3]);
-                Assert.AreEqual(Kleur.Zwart, spel.Bord[4, 4]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[1, 1]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[2, 2]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[3, 3]);
+                Assert.AreEqual(Kleur.NieuwZwart, spel.Bord[4, 4]);
                 Assert.AreEqual(Kleur.Zwart, spel.Bord[5, 5]);
             }
 
@@ -1242,10 +1243,10 @@ namespace NUnitTestProjectReversi
                 // Assert
                 Assert.IsTrue(actual);
                 Assert.AreEqual(Kleur.Wit, spel.Bord[7, 0]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[6, 1]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[5, 2]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[4, 3]);
-                Assert.AreEqual(Kleur.Wit, spel.Bord[3, 4]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[6, 1]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[5, 2]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[4, 3]);
+                Assert.AreEqual(Kleur.NieuwWit, spel.Bord[3, 4]);
                 Assert.AreEqual(Kleur.Wit, spel.Bord[2, 5]);
             }
 

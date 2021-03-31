@@ -89,9 +89,9 @@ namespace ReversiRestApi.DAL
                     spel.Speler2Token = Convert.ToString(rdr["Speler2Token"]);
                     spel.Omschrijving = Convert.ToString(rdr["Omschrijving"]);
                     spel.AandeBeurt = (Kleur)Convert.ToInt32(rdr["AandeBeurt"]);
-                    spel.Bord[Convert.ToInt32(rdr["Col"]), Convert.ToInt32(rdr["Row"])] = (Kleur)Convert.ToInt32(rdr["Kleur"]);
-                    //spel.Afgelopen = Convert.ToBoolean(rdr["Afgelopen"]);
-                    spel.Winner = Convert.ToString(rdr["Winnaar"]);
+                    spel.Bord[Convert.ToInt32(rdr["Row"]), Convert.ToInt32(rdr["Col"])] = (Kleur)Convert.ToInt32(rdr["Kleur"]);
+                    spel.Afgelopen = Convert.ToBoolean(rdr["Afgelopen"]);
+                    spel.Winnaar = Convert.ToString(rdr["Winnaar"]);
 
                 }
                 sqlCon.Close();               
@@ -135,6 +135,108 @@ namespace ReversiRestApi.DAL
                 sqlCmdSpel.ExecuteNonQuery();
                 sqlCmdCell.ExecuteNonQuery();
                 sqlCon.Close();
+            }
+        }
+
+        public void UpdateSpel(Spel spel)
+        {
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                //INSET querys for game and bord
+                string UpdateSpelQuery = "UPDATE Games SET AandeBeurt = @AandeBeurt, Afgelopen = @Afgelopen, Winnaar = @Winnaar WHERE Token = @Token";
+                string UpdateBordQuery = "UPDATE Cell SET  Kleur = @Kleur WHERE Token = @Token AND Row = @Row AND Col = @Col";
+
+                SqlCommand sqlCmd = new SqlCommand(UpdateSpelQuery, sqlCon);
+
+                sqlCmd.Parameters.AddWithValue("@Token", spel.Token);
+                sqlCmd.Parameters.AddWithValue("@AandeBeurt", spel.AandeBeurt);
+                sqlCmd.Parameters.AddWithValue("@Afgelopen", spel.Afgelopen);
+                sqlCmd.Parameters.AddWithValue("@Winnaar", spel.Winnaar);
+
+                sqlCon.Open();
+                sqlCmd.ExecuteNonQuery();
+
+                //Loops over game bord and adds all cells with x and y locations and the colour that occupies the space and the game token
+                for (int omlaag = 0; omlaag < spel.Bord.GetLength(0); omlaag++)
+                {
+                    for (int opzij = 0; opzij < spel.Bord.GetLength(1); opzij++)
+                    {
+                        SqlCommand sqlCmdAddBord = new SqlCommand(UpdateBordQuery, sqlCon);
+                        sqlCmdAddBord.Parameters.AddWithValue("@Token", spel.Token);
+                        sqlCmdAddBord.Parameters.AddWithValue("@Row", opzij);
+                        sqlCmdAddBord.Parameters.AddWithValue("@Col", omlaag);
+                        sqlCmdAddBord.Parameters.AddWithValue("@Kleur", spel.Bord[opzij, omlaag]);
+                        sqlCmdAddBord.ExecuteNonQuery();
+                    }
+                }
+
+                sqlCon.Close();
+
+            }
+        }
+        public List<int> GetPieceHistory(string spelToken, string spelerToken)
+        {
+            var pieceList = new List<int>();
+            string sqlQuery = "SELECT Amount FROM PieceHistory WHERE GameToken = @GameToken AND PlayerToken = @PlayerToken";
+
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand(sqlQuery, sqlCon);
+                sqlCmd.Parameters.AddWithValue("@GameToken", spelToken);
+                sqlCmd.Parameters.AddWithValue("@PlayerToken", spelerToken);
+                SqlDataReader rdr = sqlCmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    pieceList.Add(Convert.ToInt32(rdr["Amount"]));
+                }
+            }
+            return pieceList;
+        }
+
+        public void AddPieceHistoryteSpel(string spelToken, int aantal1, int aantal2)
+        {
+            var spel = GetSpel(spelToken);
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                string speler1SpelQuery = "INSERT INTO PieceHistory (GameToken, PlayerToken, Amount) VALUES(@GameToken, @PlayerToken, @Amount)";
+                string speler2SpelQuery = "INSERT INTO PieceHistory (GameToken, PlayerToken, Amount) VALUES(@GameToken, @PlayerToken, @Amount)";
+
+                SqlCommand sqlCmd1 = new SqlCommand(speler1SpelQuery, sqlCon);
+                SqlCommand sqlCmd2 = new SqlCommand(speler2SpelQuery, sqlCon);
+
+                sqlCmd1.Parameters.AddWithValue("@GameToken", spelToken);
+                sqlCmd1.Parameters.AddWithValue("@PlayerToken", spel.Speler1Token);
+                sqlCmd1.Parameters.AddWithValue("@Amount", aantal1);
+                sqlCmd2.Parameters.AddWithValue("@GameToken", spelToken);
+                sqlCmd2.Parameters.AddWithValue("@PlayerToken", spel.Speler2Token);
+                sqlCmd2.Parameters.AddWithValue("@Amount", aantal2);
+
+                sqlCon.Open();
+                sqlCmd1.ExecuteNonQuery();
+                sqlCmd2.ExecuteNonQuery();
+                sqlCon.Close();
+
+            }
+        }
+
+        public void OpgevenSpel(Spel spel)
+        {
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                string OpgevenSpelQuery = "UPDATE Games SET Winnaar = @Winnaar, Afgelopen = @Afgelopen WHERE Token = @Token";
+
+                SqlCommand sqlCmd = new SqlCommand(OpgevenSpelQuery, sqlCon);
+
+                sqlCmd.Parameters.AddWithValue("@Token", spel.Token);
+                sqlCmd.Parameters.AddWithValue("@Winnaar", spel.Winnaar);
+                sqlCmd.Parameters.AddWithValue("@Afgelopen", spel.Afgelopen);
+
+                sqlCon.Open();
+                sqlCmd.ExecuteNonQuery();
+                sqlCon.Close();
+
             }
         }
     }

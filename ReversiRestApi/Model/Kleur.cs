@@ -9,6 +9,8 @@ namespace ReversiRestApi.Model
     {
         Geen,
         Wit,
-        Zwart
+        Zwart,
+        NieuwWit,
+        NieuwZwart
     };
 }

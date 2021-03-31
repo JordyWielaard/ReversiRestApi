@@ -12,7 +12,7 @@ namespace ReversiRestApi.Model
         public string Bord { get; set; }
         public Kleur AandeBeurt { get; set; }
         public bool Afgelopen { get; set; }
-        public string Winner { get; set; }
+        public string Winnaar { get; set; }
 
 
         public SpelTbvJson(Spel spel)
@@ -25,7 +25,7 @@ namespace ReversiRestApi.Model
             Bord = JsonConvert.SerializeObject(spel.Bord);
             AandeBeurt = spel.AandeBeurt;
             Afgelopen = spel.Afgelopen;
-            Winner = spel.Winner;        
+            Winnaar = spel.Winnaar;        
         }
     }
 }

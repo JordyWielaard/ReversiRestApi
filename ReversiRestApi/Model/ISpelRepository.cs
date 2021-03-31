@@ -13,5 +13,9 @@ namespace ReversiRestApi.Model
         public List<Spel> GetSpellen();
         Spel GetSpel(string spelToken);
         void DeleteSpel(string spelToken);
+        void UpdateSpel(Spel spel);
+        void OpgevenSpel(Spel spel);
+        void AddPieceHistoryteSpel(string spelToken, int aantal1, int aantal2);
+        List<int> GetPieceHistory(string spelToken, string spelerToken);
     }
 }

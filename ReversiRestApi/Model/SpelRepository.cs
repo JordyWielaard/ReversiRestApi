@@ -39,7 +39,11 @@ namespace ReversiRestApi.Model
 
         }
 
+        public void UpdateSpel(Spel spel) { }
+        public void OpgevenSpel(Spel spel) { }
         public void DeleteSpel(string spelToken) { }
+        public void AddPieceHistoryteSpel(string spelToken, int aantal, int aantal2) { }
+        public List<int> GetPieceHistory(string spelToken, string spelerToken) { return new List<int>(); }
 
         public List<Spel> GetSpellen()
         {

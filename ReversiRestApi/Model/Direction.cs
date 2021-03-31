@@ -11,7 +11,6 @@ namespace ReversiRestApi.Model
         North,
         NorthEast,
         West,
-        Middel,
         East,
         SouthWest,
         South,

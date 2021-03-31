@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ReversiRestApi.Model;
 
 namespace ReversiRestApi.Controllers
@@ -31,11 +32,31 @@ namespace ReversiRestApi.Controllers
         }
 
         // GET api/spel
-        [HttpGet("{gameToken}")]
-        public ActionResult<Spel> GetGame(string gameToken)
+        [HttpGet("{spelToken}")]
+        public ActionResult<Spel> GetSpel(string spelToken)
         {
-            var spel = iRepository.GetSpel(gameToken);                
+            var spel = iRepository.GetSpel(spelToken);                
             return new ObjectResult(new SpelTbvJson(spel));
+        }
+
+        // GET api/spel
+        [HttpGet("AfgelopenSpellen")]
+        public ActionResult<List<SpelTbvJson>> GetAfgelopenSpellen()
+        {
+            var spellen = iRepository.GetSpellen();
+            List<SpelTbvJson> afgelopenSpellen = new List<SpelTbvJson>();
+            foreach (var spel in spellen)
+            {
+                if (spel.Afgelopen)
+                {
+                    afgelopenSpellen.Add(new SpelTbvJson(spel));
+                }              
+            }
+            if (afgelopenSpellen != null)
+            {
+                return new ObjectResult(afgelopenSpellen);
+            }
+            return null;
         }
 
         [HttpGet("Speler/{spelertoken}")]
@@ -51,57 +72,78 @@ namespace ReversiRestApi.Controllers
                 }
             }
             return null;
-
         }
 
-        // GET api/Beurt/<speltoken>
-        [HttpGet("Beurt/{speltoken}")]
-        public ActionResult<Kleur> GetGameTurn(string speltoken)
+        [HttpGet("PieceHistory/{speltoken}")]
+        public ActionResult<List<int>> GetPieceHistory(string speltoken)
         {
             if (!string.IsNullOrWhiteSpace(speltoken))
             {
+                List<List<int>> spelHistory = new List<List<int>>();
+
                 var spel = iRepository.GetSpel(speltoken);
-                return new ObjectResult(spel.AandeBeurt);
+
+                if (spel == null)
+                {
+                    return null;
+                }
+                if (spel.Speler2Token != "")
+                {
+                    var speler1History = iRepository.GetPieceHistory(spel.Token, spel.Speler1Token);
+                    var speler2History = iRepository.GetPieceHistory(spel.Token, spel.Speler2Token);
+                    spelHistory.Add(speler1History);
+                    spelHistory.Add(speler2History);
+                    return new ObjectResult(JsonConvert.SerializeObject(spelHistory));
+                }
             }
             return null;
 
         }
 
         // Put api/Spel/Zet
-        [HttpPut("Zet")]
-        public ActionResult<bool> PlacePiece([FromBody] PlacePiece data)
+        [HttpPost("Zet")]
+        public void PlacePiece([FromBody] [Bind("X,Y,SpelerToken,SpelToken,Pas")] PlaatsFiche data)
         {
-            var game = (from value in iRepository.GetSpellen()
-                        where value.Token.Equals(data.gameToken)
-                        select value).First();
-
-            //Check if the playerToken is on its turn
-            if (game.GetPlayerColour(data.playerToken) != game.AandeBeurt)
+            var spel = iRepository.GetSpel(data.SpelToken);
+            //spel.UpdateFiches();
+            if (!spel.Afgelopen)
             {
-                return StatusCode(403);
+                if (spel.CheckAandeBeurt(data.SpelerToken))
+                {
+                    spel.UpdateNieuweFiches();
+                    if (!data.Pas)
+                    {
+                        if (spel.DoeZet(data.Y, data.X))
+                        {
+                            if (spel.SpelAfgelopen())
+                            {
+                                spel.Afgelopen = true;
+                                spel.WinnaarSpel(spel.OverwegendeKleur());                            
+                            }
+                            iRepository.AddPieceHistoryteSpel(spel.Token, spel.SpelerPieces(Kleur.Wit), spel.SpelerPieces(Kleur.Zwart));
+                            iRepository.UpdateSpel(spel);
+                        }
+                    }
+                    else
+                    {
+                        iRepository.AddPieceHistoryteSpel(spel.Token, spel.SpelerPieces(Kleur.Wit), spel.SpelerPieces(Kleur.Zwart));
+                        spel.Pas();
+                        iRepository.UpdateSpel(spel);
+                    }
+                }
             }
-
-            //Check if player wants to pass its turn
-            if (!data.pass)
-            {
-                return game.DoeZet(data.y, data.x);
-            }
-            else
-            {
-                return game.Pas();
-            }
-
         }
 
         // Put api/Spel/Opgeven
-        [HttpPut("Opgeven")]
-        public ActionResult<bool> Surrender([FromBody] Surrender data)
+        [HttpPost("Opgeven")]
+        public void Surrender([FromBody] [Bind("SpelerToken,SpelToken")] Surrender data)
         {
-            var game = (from value in iRepository.GetSpellen()
-                        where value.Token.Equals(data.gameToken)
-                        select value).First();
-
-            return game.Surrender(data.playerToken);
+            var spel = iRepository.GetSpel(data.SpelToken);
+            if (!spel.Afgelopen)
+            {
+                spel.Surrender(data.SpelerToken);
+                iRepository.OpgevenSpel(spel);
+            }
         }
 
         [HttpPut("SpelerToevoegen")]
@@ -127,7 +169,7 @@ namespace ReversiRestApi.Controllers
         }
 
         [HttpDelete("{Id}")]
-        public void SpelVerwijderen(string Id)
+        public void SpelSpelerVerwijderen(string Id)
         {
             List<Spel> spellen;
             spellen = iRepository.GetSpellen();
@@ -142,6 +184,17 @@ namespace ReversiRestApi.Controllers
                     }
 
                 }
+            }
+        }
+
+        [HttpDelete("Afgelopen/{Id}")]
+        public void SpelVerwijderen(string spelToken)
+        {
+            var spel = iRepository.GetSpel(spelToken);
+
+            if (spel != null)
+            {
+                iRepository.DeleteSpel(spel.Token);
             }
         }
     }
