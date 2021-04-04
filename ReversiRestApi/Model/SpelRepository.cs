@@ -28,28 +28,23 @@ namespace ReversiRestApi.Model
 
             Spellen = new List<Spel> { spel1, spel2, spel3 };
         }
-
         public void AddSpel(Spel spel)
         {
             Spellen.Add(spel);
         }
-
         public void JoinSpel(JoinGame data)
         {
 
         }
-
         public void UpdateSpel(Spel spel) { }
         public void OpgevenSpel(Spel spel) { }
         public void DeleteSpel(string spelToken) { }
         public void AddPieceHistoryteSpel(string spelToken, int aantal, int aantal2) { }
         public List<int> GetPieceHistory(string spelToken, string spelerToken) { return new List<int>(); }
-
         public List<Spel> GetSpellen()
         {
             return Spellen;
         }
-
         public Spel GetSpel(string spelToken)
         {
             return (Spel)(from value in Spellen where spelToken == value.Speler1Token select value);

@@ -14,7 +14,7 @@ namespace ReversiRestApi.Model
         public bool Afgelopen { get; set; }
         public string Winnaar { get; set; }
 
-
+        //Deze class zet een spel om naar JSON
         public SpelTbvJson(Spel spel)
         {
             ID = spel.ID;

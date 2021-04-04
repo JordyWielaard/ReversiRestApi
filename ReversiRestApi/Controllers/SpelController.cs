@@ -105,7 +105,6 @@ namespace ReversiRestApi.Controllers
         public void PlacePiece([FromBody] [Bind("X,Y,SpelerToken,SpelToken,Pas")] PlaatsFiche data)
         {
             var spel = iRepository.GetSpel(data.SpelToken);
-            //spel.UpdateFiches();
             if (!spel.Afgelopen)
             {
                 if (spel.CheckAandeBeurt(data.SpelerToken))

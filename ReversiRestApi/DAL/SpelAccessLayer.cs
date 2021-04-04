@@ -12,7 +12,7 @@ namespace ReversiRestApi.DAL
     {
         private const string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=ReversiDbRestApi; Integrated Security=True;";
 
-        //Insert game to database table & insert all cell values into cell table with the game token
+        //Insert een spel in de database & insert alle cell waarders in de tabel cell met het spel token
         public void AddSpel(Spel spel)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
@@ -31,8 +31,7 @@ namespace ReversiRestApi.DAL
 
                 sqlCon.Open();
                 sqlCmd.ExecuteNonQuery();             
-                
-                //Loops over game bord and adds all cells with x and y locations and the colour that occupies the space and the game token
+                //Loopt over het spel bord en voegt de cellen met x en y locaties en de kleuren toe
                 for (int i = 0; i < spel.Bord.GetLength(0); i++)
                 {
                     for (int j = 0; j < spel.Bord.GetLength(1); j++)
@@ -51,6 +50,7 @@ namespace ReversiRestApi.DAL
             }
         }
 
+        //Update een spel wanneer een speler 2 joined
         public void JoinSpel(JoinGame data)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
@@ -68,7 +68,7 @@ namespace ReversiRestApi.DAL
             }
         }
 
-        //TODO: Add query to get bord from database
+        //Haalt alles van het spel op
         public Spel GetSpel(string spelToken)
         {
             var spel = new Spel();
@@ -99,6 +99,7 @@ namespace ReversiRestApi.DAL
             return spel;
         }
 
+        //Haalt alle spellen op
         public List<Spel> GetSpellen()
         {
             var spelList = new List<Spel>();
@@ -118,6 +119,7 @@ namespace ReversiRestApi.DAL
             return spelList;
         }
 
+        //Verwijderd een spel uit de database
         public void DeleteSpel(string spelToken)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
@@ -138,6 +140,7 @@ namespace ReversiRestApi.DAL
             }
         }
 
+        //Update een spel 
         public void UpdateSpel(Spel spel)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
@@ -174,6 +177,8 @@ namespace ReversiRestApi.DAL
 
             }
         }
+
+        //Haalt de history van een spel op met het aantal fiches per kleur die er waren per zet
         public List<int> GetPieceHistory(string spelToken, string spelerToken)
         {
             var pieceList = new List<int>();
@@ -195,6 +200,7 @@ namespace ReversiRestApi.DAL
             return pieceList;
         }
 
+        //Voegt het aantal fiches per beurt per kleur toe aan de database
         public void AddPieceHistoryteSpel(string spelToken, int aantal1, int aantal2)
         {
             var spel = GetSpel(spelToken);
@@ -221,6 +227,7 @@ namespace ReversiRestApi.DAL
             }
         }
 
+        //Update het spel wanneer een speler opgeeft
         public void OpgevenSpel(Spel spel)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))

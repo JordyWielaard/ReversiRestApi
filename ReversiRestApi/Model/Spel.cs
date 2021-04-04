@@ -29,6 +29,7 @@ namespace ReversiRestApi.Model
             Afgelopen = false;
 
         }
+        //Haal het aantal Pieces op dat een speler heeft
         public int SpelerPieces(Kleur kleur)
         {
             int aantal = 0;
@@ -55,16 +56,22 @@ namespace ReversiRestApi.Model
             }
             return aantal;
         }
+
+        //Maak een lijst van posities waar een fiche moet worden veranderd
         public List<Positie> OmTeKerenFichesInRichting(Direction richting, Kleur kleurAandeBeurt, Positie positie)
         {
             List<Positie> voorlopigeLijst = new List<Positie>();
 
+            //zet de positie om te checken
             var buurPositie = CheckRichting(richting,positie);
+            //kijk of het niet null is en of er op die positie een fiche van een tegenstander staat
             while (buurPositie != null && Bord[buurPositie.Opzij, buurPositie.Omlaag] == Tegenstander(kleurAandeBeurt))
             {
                 voorlopigeLijst.Add(buurPositie);
+                //ga naar de volgende positie
                 buurPositie = CheckRichting(richting, buurPositie);
             }
+            //als er een andere kleur wordt gevonden wordt er gekeken of het de kleur van de speler die aan de beurt is is, zo ja return de list zo nee return een lege list
             if (buurPositie != null && Bord[buurPositie.Opzij, buurPositie.Omlaag] == kleurAandeBeurt)
             {
                 return voorlopigeLijst;
@@ -72,6 +79,8 @@ namespace ReversiRestApi.Model
 
             return new List<Positie>();
         }
+
+        //Kijken wat de kleur van de regenstander en en return deze
         public Kleur Tegenstander(Kleur aandeBeurt)
         {
             if (AandeBeurt == Kleur.Wit)
@@ -87,6 +96,8 @@ namespace ReversiRestApi.Model
                 return Kleur.Geen;
             }
         }
+
+        //Check in de richting die mee gegeven wordt als dit van het bord is return null anders return een nieuwe positie met die x en y
         public Positie CheckRichting(Direction richting, Positie huidigePositie)
         {
             switch (richting)
@@ -142,6 +153,8 @@ namespace ReversiRestApi.Model
             }
             return null;
         }
+
+        //Check of de speler aan de beurt is
         public bool CheckAandeBeurt(string spelerToken)
         {
             if (AandeBeurt == Kleur.Wit && Speler2Token == spelerToken)
@@ -154,6 +167,8 @@ namespace ReversiRestApi.Model
             }
             return false;
         }
+
+        //Geeft het spel op voor de speler en zet de tegenstander als winnaar en het spel op afgelopen
         public bool Surrender(string playerID)
         {
             if (playerID == Speler1Token)
@@ -171,10 +186,11 @@ namespace ReversiRestApi.Model
             }
             else
             {
-                //Coulndt find player to surrender
+                //verkeerde token
                 return false;
             }
         }
+        //Kijkt of het spel is afgelopen zo ja return true zo nee return false
         public bool SpelAfgelopen()
         {
             for (int opzij = 0; opzij < Bord.GetLength(0); opzij++)
@@ -189,12 +205,15 @@ namespace ReversiRestApi.Model
             }
             return true;
         }
+
+        //Als de zet kan wordt deze gedaan en wordt er true gereturned en de andere speler is aan de beurt anders return false
         public bool DoeZet(int omlaag, int opzij)
         {
             if (ZetMogelijk(omlaag, opzij).Count() > 0)
             {
                 foreach (var item in ZetMogelijk(omlaag, opzij))
                 {
+                    //verander de fiches naar de juiste kleur in de juiste richtingen
                     VeranderKleurTile(AandeBeurt, OmTeKerenFichesInRichting(item, AandeBeurt, new Positie(omlaag, opzij)));
                 }
                     
@@ -207,6 +226,7 @@ namespace ReversiRestApi.Model
             }
         }
 
+        //Update fiche van nieuw fiche naar normaal fiche voor animatie in client
         public void UpdateNieuweFiches()
         {
             for (int opzij = 0; opzij < Bord.GetLength(0); opzij++)
@@ -225,6 +245,7 @@ namespace ReversiRestApi.Model
             }
         }
 
+        //Verander de kleur van een fiche op een bepaalde positie
         public void VeranderKleurTile(Kleur aanZet, List<Positie> posities)
         {
             foreach (var item in posities)
@@ -239,6 +260,8 @@ namespace ReversiRestApi.Model
                 }              
             }
         }
+
+        //check wie er meer fiches heeft
         public Kleur OverwegendeKleur()
         {
             int countBlack = 0;
@@ -276,6 +299,8 @@ namespace ReversiRestApi.Model
                 return Kleur.Geen;
             }
         }
+
+        //Zet de winnaar van het spel
         public void WinnaarSpel(Kleur kleur)
         {
             if (kleur.Equals(Kleur.Wit))
@@ -292,6 +317,7 @@ namespace ReversiRestApi.Model
             }
         }
 
+        //Pas de zet naar de andere speler
         public bool Pas()
         {
             if (AandeBeurt.Equals(Kleur.Wit))
@@ -305,6 +331,8 @@ namespace ReversiRestApi.Model
                 return true;
             }
         }
+
+        //Kijk of een zet mogelijk is in een direction en return een lijst met directions waar een zet mogelijk is
         public List<Direction> ZetMogelijk(int opzij, int omlaag)
         {
             var positie = new Positie(opzij, omlaag);
